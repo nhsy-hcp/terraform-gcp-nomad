@@ -71,3 +71,8 @@ tasks:
   terraform-destroy:
     dir: tf
     cmd: terraform destroy -auto-approve
+
+  terraform-output:
+    aliases: ["output", "tfo"]
+    dir: tf
+    cmd: terraform output

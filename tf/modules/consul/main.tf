@@ -39,6 +39,13 @@ resource "google_compute_instance" "consul_servers" {
   }
 
   service_account {
+    email  = google_service_account.default.email
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
+  }
+
+  lifecycle {
+    ignore_changes = [
+      boot_disk[0].initialize_params[0].image,
+    ]
   }
 }

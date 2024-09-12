@@ -22,5 +22,6 @@ sed -i 's/__REGION__/${REGION}/g' /etc/nomad.d/nomad.hcl
 systemctl enable consul
 systemctl enable nomad
 systemctl start consul
+sleep 30
 systemctl start nomad
 echo "userdata_done"

@@ -71,7 +71,7 @@ EOF
 }
 
 output "env_vars" {
-  value = <<EOF
+  value       = <<EOF
 export CONSUL_HTTP_ADDR=${module.consul.fqdn}:8500
 export NOMAD_ADDR=http://${module.nomad.fqdn}:4646
 EOF
