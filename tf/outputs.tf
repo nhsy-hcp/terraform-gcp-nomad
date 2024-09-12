@@ -1,14 +1,72 @@
-output "nomad_server_ips" {
-  value = [for instance in google_compute_instance.nomad_servers : instance.network_interface[0].access_config[0].nat_ip]
+output "consul_server_external_ips" {
+  value       = module.consul.external_server_ips
   description = "External IP addresses of Nomad server instances"
 }
 
-output "consul_server_ips" {
-  value = [for instance in google_compute_instance.consul_servers : instance.network_interface[0].access_config[0].nat_ip]
+output "consul_server_internal_ips" {
+  value       = module.consul.internal_server_ips
+  description = "Internal IP addresses of Nomad server instances"
+}
+
+output "nomad_server_external_ips" {
+  value       = module.nomad.external_server_ips
   description = "External IP addresses of Nomad server instances"
 }
 
-output "nomad_client_ips" {
-  value = [for instance in google_compute_instance.nomad_client : instance.network_interface[0].access_config[0].nat_ip]
+output "nomad_server_internal_ips" {
+  value       = module.nomad.internal_server_ips
+  description = "Internal IP addresses of Nomad server instances"
+}
+
+output "nomad_client_internal_ips" {
+  value       = module.nomad.internal_client_ips
   description = "External IP addresses of Nomad client instances"
+}
+
+output "secondary_consul_server_external_ips" {
+  value       = module.secondary_consul.external_server_ips
+  description = "External IP addresses of Consul server failover instances"
+}
+
+output "secondary_nomad_server_external_ips" {
+  value       = module.secondary_nomad.external_server_ips
+  description = "External IP addresses of Nomad server failover instances"
+}
+
+output "consul_fqdn" {
+  value       = module.consul.fqdn
+  description = "FQDN of the Consul server"
+}
+
+output "nomad_fqdn" {
+  value       = module.nomad.fqdn
+  description = "FQDN of the Nomad server"
+}
+
+output "consul_url" {
+  value       = "http://${module.consul.fqdn}:8500"
+  description = "URL of the Consul server"
+}
+
+output "nomad_url" {
+  value       = "http://${module.nomad.fqdn}:4646"
+  description = "URL of the Nomad server"
+}
+
+output "secondary_consul_url" {
+  value       = "http://${module.secondary_consul.fqdn}:8500"
+  description = "URL of the Consul server"
+}
+
+output "secondary_nomad_url" {
+  value       = "http://${module.secondary_nomad.fqdn}:4646"
+  description = "URL of the Nomad server"
+}
+
+output "nomad_join" {
+  value       = <<EOF
+gcloud compute ssh ${module.secondary_nomad.names[0]} --zone ${data.google_compute_zones.secondary.names[0]} --tunnel-through-iap -- nomad server members
+gcloud compute ssh ${module.secondary_nomad.names[0]} --zone ${data.google_compute_zones.secondary.names[0]} --tunnel-through-iap -- nomad server join ${module.nomad.internal_server_ips[0]}
+EOF
+  description = "Nomad join command"
 }

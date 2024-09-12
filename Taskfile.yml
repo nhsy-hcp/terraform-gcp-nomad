@@ -1,0 +1,73 @@
+# https://taskfile.dev
+version: '3'
+
+tasks:
+
+  all:
+    desc: Run all tasks
+    cmds:
+      - task: packer
+      - task: apply
+
+  packer:
+    desc: Build Packer images
+    cmds:
+      - task: packer-init
+      - task: packer-build
+      - echo "All packer builds are complete."
+
+  apply:
+    desc: Deploy infrastructure
+    cmds:
+      - task: terraform-init
+      - task: terraform-apply
+
+  destroy:
+    desc: Deploy infrastructure
+    cmds:
+      - task: terraform-destroy
+
+  clean:
+    cmds:
+      - |
+        echo GCP Project ID: {{ .GCP_PROJECT }}
+        for image in $(gcloud compute images list --project {{ .GCP_PROJECT }} --no-standard-images --format="value(NAME)"); do gcloud compute images delete --project {{ .GCP_PROJECT }} -q $image;done
+    ignore_error: true
+    vars:
+      GCP_PROJECT:
+        sh: gcloud config get-value project
+
+  packer-init:
+    cmds:
+      - packer init packer/gcp-almalinux-nomad-server.pkr.hcl
+      - packer init packer/gcp-almalinux-nomad-client.pkr.hcl
+      - packer init packer/gcp-almalinux-consul-server.pkr.hcl
+
+  packer-build:
+    deps: [packer-nomad-server, packer-nomad-client, packer-consul-server]
+
+  packer-nomad-server:
+    cmd: packer build -var-file=variables.pkrvars.hcl packer/gcp-almalinux-nomad-server.pkr.hcl
+
+  packer-nomad-client:
+    cmd: packer build -var-file=variables.pkrvars.hcl packer/gcp-almalinux-nomad-client.pkr.hcl
+
+  packer-consul-server:
+    cmd: packer build -var-file=variables.pkrvars.hcl packer/gcp-almalinux-consul-server.pkr.hcl
+
+  terraform-init:
+    dir: tf
+    cmd: terraform init
+
+  terraform-plan:
+    aliases: ["plan"]
+    dir: tf
+    cmd: terraform plan
+
+  terraform-apply:
+    dir: tf
+    cmd: terraform apply -auto-approve
+
+  terraform-destroy:
+    dir: tf
+    cmd: terraform destroy -auto-approve

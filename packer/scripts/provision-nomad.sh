@@ -51,5 +51,9 @@ sudo cp /tmp/nomad.hclic /etc/nomad.d/license.hclic
 sudo cp /tmp/consul.hclic /etc/consul.d/license.hclic
 
 # Enable Services to start at boot
-sudo systemctl enable nomad
-sudo systemctl enable consul
+#sudo systemctl enable nomad
+#sudo systemctl enable consul
+
+# Install Google Cloud Ops Agent
+curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
+sudo bash add-google-cloud-ops-agent-repo.sh --also-install

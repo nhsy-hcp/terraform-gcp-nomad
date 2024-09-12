@@ -1,8 +1,9 @@
-datacenter              = "nomad"
+datacenter              = "__DATACENTER__"
 
-data_dir                = "/opt/consul"
+data_dir                = "/opt/consul/data"
 
-bind_addr               = "0.0.0.0" # the default
+advertise_addr          = "{{ GetInterfaceIP \"eth0\" }}"
+bind_addr               = "0.0.0.0"
 client_addr             = "0.0.0.0"
 
 log_level               = "INFO"
@@ -12,8 +13,8 @@ log_rotate_max_files    = 5
 
 server                  = true
 
-bootstrap_expect        = 3
-retry_join              = ["provider=gce tag_value=consul-server"]
+bootstrap_expect        = 1
+retry_join              = ["provider=gce tag_value=consul-server zone_pattern=__REGION__.*"]
 
 license_path            = "/etc/consul.d/license.hclic"
 

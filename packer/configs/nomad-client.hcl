@@ -1,6 +1,8 @@
-data_dir  = "/opt/nomad/data"
+datacenter            = "__DATACENTER__"
+data_dir              = "/opt/nomad/data"
+region                = "__REGION__"
 
-bind_addr = "0.0.0.0" # the default
+bind_addr             = "0.0.0.0"
 
 log_level             = "INFO"
 log_file              = "/var/log/"
@@ -14,6 +16,12 @@ server {
 
 client {
   enabled             = true
+}
+
+plugin "docker" {
+  config {
+    allow_privileged = true
+  }
 }
 
 plugin "raw_exec" {

@@ -1,6 +1,8 @@
+datacenter            = "__DATACENTER__"
 data_dir              = "/opt/nomad/data"
+region                = "__REGION__"
 
-bind_addr             = "0.0.0.0" # the default
+bind_addr             = "0.0.0.0"
 
 log_level             = "INFO"
 log_file              = "/var/log/"
@@ -10,7 +12,7 @@ log_rotate_max_files  = 5
 server {
   license_path        = "/etc/nomad.d/license.hclic"
   enabled             = true
-  bootstrap_expect    = 3
+  bootstrap_expect    = 1
 }
 
 client {
