@@ -7,11 +7,15 @@ if [ -f /var/log/user-data.log ]; then
 fi
 exec &> >(tee -a /var/log/user-data.log)
 gsutil cp gs://${GCS_BUCKET}/consul-client.hcl /etc/consul.d/consul.hcl
+gsutil cp gs://${GCS_BUCKET}/consul.hclic /etc/consul.d/license.hclic
+gsutil cp gs://${GCS_BUCKET}/nomad.hclic /etc/nomad.d/license.hclic
+
 if [ "${NOMAD_ROLE}" == "server" ]; then
     gsutil cp gs://${GCS_BUCKET}/nomad-server.hcl /etc/nomad.d/nomad.hcl
 else
     gsutil cp gs://${GCS_BUCKET}/nomad-client.hcl /etc/nomad.d/nomad.hcl
 fi
+
 sed -i 's/__DATACENTER__/${DATACENTER}/g' /etc/nomad.d/nomad.hcl /etc/consul.d/consul.hcl
 sed -i 's/__REGION__/${REGION}/g' /etc/consul.d/consul.hcl
 sed -i 's/__REGION__/${REGION}/g' /etc/nomad.d/nomad.hcl

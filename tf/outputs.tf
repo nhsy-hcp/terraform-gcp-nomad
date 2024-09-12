@@ -65,8 +65,15 @@ output "secondary_nomad_url" {
 
 output "nomad_join" {
   value       = <<EOF
-gcloud compute ssh ${module.secondary_nomad.names[0]} --zone ${data.google_compute_zones.secondary.names[0]} --tunnel-through-iap -- nomad server members
-gcloud compute ssh ${module.secondary_nomad.names[0]} --zone ${data.google_compute_zones.secondary.names[0]} --tunnel-through-iap -- nomad server join ${module.nomad.internal_server_ips[0]}
+gcloud compute ssh ${module.secondary_nomad.names[0]} --zone ${data.google_compute_zones.secondary.names[0]} --tunnel-through-iap -- "nomad server join ${module.nomad.internal_server_ips[0]}; nomad server members"
 EOF
   description = "Nomad join command"
+}
+
+output "env_vars" {
+  value = <<EOF
+export CONSUL_HTTP_ADDR=${module.consul.fqdn}:8500
+export NOMAD_ADDR=http://${module.nomad.fqdn}:4646
+EOF
+  description = "Environment variables for Consul and Nomad"
 }
