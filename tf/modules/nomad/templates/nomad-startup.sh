@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -xe
 #exec > >(sudo tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 if [ -f /var/log/user-data.log ]; then
 	echo "userdata_skipped"

@@ -18,11 +18,6 @@ output "nomad_server_internal_ips" {
   description = "Internal IP addresses of Nomad server instances"
 }
 
-output "nomad_client_internal_ips" {
-  value       = module.nomad.internal_client_ips
-  description = "External IP addresses of Nomad client instances"
-}
-
 output "secondary_consul_server_external_ips" {
   value       = module.secondary_consul.external_server_ips
   description = "External IP addresses of Consul server failover instances"
@@ -54,21 +49,21 @@ output "nomad_url" {
 }
 
 output "secondary_consul_url" {
-  value       = "http://${module.secondary_consul.fqdn}:8500"
+  value       = var.create_secondary_consul_cluster ? "http://${module.secondary_consul.fqdn}:8500" : null
   description = "URL of the Consul server"
 }
 
 output "secondary_nomad_url" {
-  value       = "http://${module.secondary_nomad.fqdn}:4646"
+  value       = var.create_secondary_nomad_cluster ? "http://${module.secondary_nomad.fqdn}:4646" : null
   description = "URL of the Nomad server"
 }
 
-output "nomad_join" {
-  value       = <<EOF
-gcloud compute ssh ${module.secondary_nomad.names[0]} --zone ${data.google_compute_zones.secondary.names[0]} --tunnel-through-iap -- "nomad server join ${module.nomad.internal_server_ips[0]}; nomad server members"
-EOF
-  description = "Nomad join command"
-}
+# output "nomad_join" {
+#   value       = !var.create_secondary_nomad_cluster ? null : <<EOF
+# gcloud compute ssh ${try(module.secondary_nomad.names[0], "")} --zone ${data.google_compute_zones.secondary.names[0]} --tunnel-through-iap -- "nomad server join ${module.nomad.internal_server_ips[0]}; nomad server members"
+# EOF
+#   description = "Nomad join command"
+# }
 
 output "env_vars" {
   value       = <<EOF

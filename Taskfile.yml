@@ -60,19 +60,23 @@ tasks:
     cmd: terraform init
 
   terraform-plan:
-    aliases: ["plan"]
+    aliases: ["plan", "tfp"]
     dir: tf
+    deps: [terraform-init]
     cmd: terraform plan
 
   terraform-apply:
+    aliases: ["tfa"]
+    deps: [terraform-init]
     dir: tf
     cmd: terraform apply -auto-approve
 
   terraform-destroy:
+    aliases: ["tfd"]
     dir: tf
     cmd: terraform destroy -auto-approve
 
   terraform-output:
-    aliases: ["output", "tfo"]
+    aliases: ["tfo"]
     dir: tf
     cmd: terraform output

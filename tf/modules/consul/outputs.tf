@@ -9,6 +9,6 @@ output "internal_server_ips" {
 }
 
 output "fqdn" {
-  value       = trimsuffix(google_dns_record_set.default.name, ".")
+  value       = var.create_consul_cluster ? trimsuffix(try(google_dns_record_set.default[0].name, ""), ".") : null
   description = "FQDN of the Consul server"
 }

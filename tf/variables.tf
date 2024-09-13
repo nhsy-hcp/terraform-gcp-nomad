@@ -27,6 +27,21 @@ variable "nomad_client_instances" {
   default     = 3
 }
 
+variable "secondary_consul_server_instances" {
+  description = "The number of server instances to create"
+  default     = 1
+}
+
+variable "secondary_nomad_server_instances" {
+  description = "The number of server instances to create"
+  default     = 1
+}
+
+variable "secondary_nomad_client_instances" {
+  description = "The number of client instances to create"
+  default     = 3
+}
+
 variable "subnet_cidr" {
   description = "The CIDR range for the subnet"
   default     = "10.128.64.0/24"
@@ -80,4 +95,39 @@ variable "dns_managed_zone" {
 variable "gcs_bucket" {
   description = "The name of the GCS bucket to use for configuration"
   default     = null
+}
+
+variable "create_nomad_cluster" {
+  description = "Whether to create Nomad resources"
+  default     = true
+}
+
+variable "create_consul_cluster" {
+  description = "Whether to create Consul resources"
+  default     = true
+}
+
+variable "create_secondary_nomad_cluster" {
+  description = "Whether to create Nomad resources"
+  default     = true
+}
+
+variable "create_secondary_consul_cluster" {
+  description = "Whether to create Consul resources"
+  default     = true
+}
+
+variable "create_nomad_jobs" {
+  description = "Whether to create Nomad jobs"
+  default     = true
+}
+
+variable "nomad_client_machine_type" {
+  description = "The machine type to use for Nomad clients"
+  default     = "e2-medium"
+}
+
+variable "nomad_client_disk_size" {
+  description = "The disk size to use for Nomad clients"
+  default     = 20
 }

@@ -7,20 +7,17 @@ export CONSUL_VERSION="1.19.2+ent"
 sudo dnf update -y
 
 # Install required packages
-sudo dnf install -y unzip curl wget
+sudo dnf install -y unzip curl wget yum-utils
 
 # Add HashiCorp's official RPM repository
-curl -fsSL https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo | sudo tee /etc/yum.repos.d/hashicorp.repo
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
 
-# Install Nomad
-sudo dnf install -y nomad
-
-# Install Consul
-sudo dnf install -y consul
+# Install Consul & Nomad
+sudo dnf install -y consul nomad
 
 # Upgrade Nomad to ent
 wget -q "https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip"
-unzip "nomad_${NOMAD_VERSION}_linux_amd64.zip"
+unzip "nomad_${NOMAD_VERSION}_linux_amd64.zip" nomad
 chmod +x nomad
 sudo chown root:root nomad
 sudo mv nomad /usr/bin/nomad
@@ -28,7 +25,7 @@ nomad --version
 
 # Upgrade Consul to ent
 wget -q "https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip"
-unzip consul_${CONSUL_VERSION}_linux_amd64.zip
+unzip consul_${CONSUL_VERSION}_linux_amd64.zip consul
 chmod +x consul
 sudo chown root:root consul
 sudo mv consul /usr/bin/consul
