@@ -131,3 +131,13 @@ variable "nomad_client_disk_size" {
   description = "The disk size to use for Nomad clients"
   default     = 20
 }
+
+variable "network_name" {
+  description = "The name of the network to use"
+  default     = null
+}
+
+variable "nomad_fqdn" {
+  description = "The FQDN for Nomad primary"
+  default     = null
+}

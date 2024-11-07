@@ -1,0 +1,10 @@
+# resource "null_resource" "autoscaler" {
+#   count = var.create_nomad_jobs ? 1 : 0
+#   provisioner "local-exec" {
+#     command = "export NOMAD_ADDR=$NA && nomad job run -detach hashicups.nomad.hcl"
+#
+#     environment = {
+#       NA = "http://${module.nomad.fqdn}:4646"
+#     }
+#   }
+# }

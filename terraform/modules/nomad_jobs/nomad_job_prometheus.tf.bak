@@ -1,0 +1,19 @@
+resource "nomad_job" "prometheus" {
+  count = var.create_nomad_jobs ? 1 : 0
+
+  jobspec = file("${path.module}/templates/prometheus.nomad")
+}
+
+resource "null_resource" "autoscaler" {
+  count = var.create_nomad_jobs ? 1 : 0
+
+  provisioner "local-exec" {
+    command = "export NOMAD_ADDR=$NA && nomad-pack list && nomad-pack run nomad_autoscaler --registry=community --parser-v1"
+
+    environment = {
+      NA = "http://${var.nomad_fqdn}:4646"
+    }
+  }
+
+  depends_on = [nomad_job.prometheus]
+}

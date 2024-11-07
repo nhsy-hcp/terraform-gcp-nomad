@@ -43,7 +43,6 @@ resource "null_resource" "wait_for_nomad_api" {
 
   provisioner "local-exec" {
     command = "while ! nomad server members 2>&1; do echo 'waiting for nomad api...'; sleep 10; done"
-    #command = "while ! nomad server members > /dev/null 2>&1; do echo 'waiting for nomad api...'; sleep 10; done"    command = "while ! nomad server members > /dev/null 2>&1; do echo 'waiting for nomad api...'; sleep 10; done"
     environment = {
       NOMAD_ADDR = local.nomad_url
     }
