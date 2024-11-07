@@ -7,4 +7,9 @@ module "nomad_jobs" {
   mgmt_cidr         = local.mgmt_cidr
   network_name      = module.network.name
   nomad_fqdn        = module.nomad.fqdn
+
+  depends_on = [
+    null_resource.wait_for_nomad_api,
+    null_resource.wait_for_secondary_nomad_api,
+  ]
 }
